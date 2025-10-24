@@ -9,10 +9,10 @@ import numpy as np
 
 class ConceptReframing(Scene):
     def construct(self):
-        # Title
+        # Title - simpler animation
         title = Text("Reframing: Art as Conceptual Combinations", font_size=40).to_edge(UP)
         
-        # Start with a traditional art view
+        # Start with a traditional art view - simpler animation
         traditional_label = Text(
             "Traditional View: Art as Visual Object",
             font_size=28,
@@ -23,12 +23,12 @@ class ConceptReframing(Scene):
         try:
             import os
             image_path = os.path.join(os.path.dirname(__file__), "..", "image__gen0.png")
-            artwork = ImageMobject(image_path).scale(0.8)
+            artwork = ImageMobject(image_path).scale(1.2)  # Bigger initial size
             artwork.shift(UP * 0.2)
         except:
-            # Placeholder if image not found
+            # Placeholder if image not found - also bigger
             artwork = Rectangle(
-                height=3, width=3,
+                height=4, width=4,
                 fill_color=BLUE_E,
                 fill_opacity=0.5,
                 stroke_color=WHITE,
@@ -36,18 +36,20 @@ class ConceptReframing(Scene):
             )
             artwork.shift(UP * 0.2)
         
-        self.play(Write(traditional_label), run_time=0.8)
-        self.play(FadeIn(artwork), run_time=1)
-        self.wait(0.5)
+        # More elegant text appearance
+        self.play(FadeIn(traditional_label, shift=DOWN*0.2), run_time=1)
+        self.play(FadeIn(artwork, scale=0.95), run_time=1.2)
+        self.wait(1.2)  # Longer wait to let viewers see the image
         
         # Transition: "But what if we think differently?"
         self.play(
-            FadeOut(traditional_label),
-            Write(title),
-            run_time=1
+            FadeOut(traditional_label, shift=UP*0.2),
+            FadeIn(title, shift=DOWN*0.2),
+            run_time=1.2
         )
+        self.wait(0.5)
         
-        # Dissolve artwork into concepts
+        # Create concept tags data
         concepts_data = [
             ("Woman", ORANGE),
             ("Ukiyo-e", TEAL),
@@ -61,30 +63,84 @@ class ConceptReframing(Scene):
             for text, color in concepts_data
         ])
         
-        # Initially all at artwork center
-        for tag in concept_tags:
-            tag.move_to(artwork.get_center())
+        # NEW: Split artwork into patches
+        # Create a grid of patches (3x3)
+        patches = VGroup()
+        rows, cols = 3, 3
+        artwork_height = artwork.height
+        artwork_width = artwork.width
+        patch_height = artwork_height / rows
+        patch_width = artwork_width / cols
         
-        # Dissolve animation
+        for i in range(rows):
+            for j in range(cols):
+                # Create a rectangle for each patch
+                patch = Rectangle(
+                    height=patch_height,
+                    width=patch_width,
+                    fill_color=BLUE_E,
+                    fill_opacity=0.5,
+                    stroke_color=WHITE,
+                    stroke_width=1,
+                    stroke_opacity=0.5
+                )
+                # Position the patch in grid
+                x_offset = (j - cols/2 + 0.5) * patch_width
+                y_offset = (rows/2 - i - 0.5) * patch_height
+                patch.move_to(artwork.get_center() + RIGHT * x_offset + UP * y_offset)
+                patches.add(patch)
+        
+        # First, overlay patches on the artwork
         self.play(
-            artwork.animate.set_fill_opacity(0.05).set_stroke_opacity(0.3),
-            LaggedStart(*[FadeIn(tag, scale=0.5) for tag in concept_tags], lag_ratio=0.15),
-            run_time=1.5
+            artwork.animate.set_opacity(0.3),
+            FadeIn(patches),
+            run_time=1.2
         )
-        self.play(FadeOut(artwork))
+        self.wait(0.3)
+        
+        # Select specific patches to transform into concepts
+        # We'll use 5 patches spread across the grid for our 5 concepts
+        selected_patch_indices = [0, 2, 4, 6, 8]  # corners and center
+        
+        # Transform selected patches into concept tags
+        transformations = []
+        for idx, patch_idx in enumerate(selected_patch_indices):
+            if idx < len(concept_tags):
+                # Position concept tag at patch location initially
+                concept_tags[idx].move_to(patches[patch_idx].get_center())
+                transformations.append(
+                    Transform(patches[patch_idx], concept_tags[idx])
+                )
+        
+        # Animate the transformation
+        self.play(
+            *transformations,
+            FadeOut(artwork),
+            *[FadeOut(patches[i]) for i in range(len(patches)) if i not in selected_patch_indices],
+            run_time=1.8
+        )
+        
+        # Remove transformed patches and add concept tags
+        for idx in selected_patch_indices:
+            patches[idx].become(concept_tags[selected_patch_indices.index(idx)])
+        
+        self.wait(0.5)
         
         # Spread concepts in a circle
-        radius = 2
+        radius = 2.2
         angles = [i * 2*PI/len(concept_tags) for i in range(len(concept_tags))]
         positions = [
             radius * np.array([np.cos(angle), np.sin(angle), 0])
             for angle in angles
         ]
         
-        self.play(
-            *[tag.animate.move_to(pos) for tag, pos in zip(concept_tags, positions)],
-            run_time=1.5
-        )
+        # Move concepts to circle positions
+        animations = []
+        for idx, patch_idx in enumerate(selected_patch_indices):
+            animations.append(patches[patch_idx].animate.move_to(positions[idx]))
+        
+        self.play(*animations, run_time=2)
+        self.wait(0.8)
         
         # Show the combinatorial space
         subtitle = Text(
@@ -95,11 +151,13 @@ class ConceptReframing(Scene):
         
         # Create connections showing possible combinations
         all_connections = VGroup()
-        for i in range(len(concept_tags)):
-            for j in range(i+1, len(concept_tags)):
+        concept_positions = [patches[idx].get_center() for idx in selected_patch_indices]
+        
+        for i in range(len(concept_positions)):
+            for j in range(i+1, len(concept_positions)):
                 line = Line(
-                    concept_tags[i].get_center(),
-                    concept_tags[j].get_center(),
+                    concept_positions[i],
+                    concept_positions[j],
                     stroke_width=1,
                     color=GREY,
                     stroke_opacity=0.3
@@ -108,36 +166,14 @@ class ConceptReframing(Scene):
         
         self.play(
             Create(all_connections),
-            run_time=1.2
+            run_time=1.5
         )
         
-        # Highlight a few example combinations with pulsing
-        combo1 = VGroup(concept_tags[0], concept_tags[1], concept_tags[2])  # Woman + Ukiyo-e + Landscape
-        combo2 = VGroup(concept_tags[1], concept_tags[3], concept_tags[4])  # Ukiyo-e + Winter + Mountain
+        # Simpler subtitle animation
+        self.play(FadeIn(subtitle, shift=UP*0.2), run_time=1)
         
-        self.play(Write(subtitle), run_time=0.8)
-        
-        # Pulse first combination
-        self.play(
-            *[tag.animate.scale(1.2).set_stroke_width(4) for tag in combo1],
-            run_time=0.4
-        )
-        self.play(
-            *[tag.animate.scale(1/1.2).set_stroke_width(2) for tag in combo1],
-            run_time=0.4
-        )
-        
-        # Pulse second combination
-        self.play(
-            *[tag.animate.scale(1.2).set_stroke_width(4) for tag in combo2],
-            run_time=0.4
-        )
-        self.play(
-            *[tag.animate.scale(1/1.2).set_stroke_width(2) for tag in combo2],
-            run_time=0.4
-        )
-        
-        self.wait(1)
+        # Just let viewers see the concepts as the combination
+        self.wait(2)
     
     def create_concept_tag(self, text: str, color: str) -> VGroup:
         """Helper to create a rounded rectangle concept tag"""
