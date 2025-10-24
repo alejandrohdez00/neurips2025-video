@@ -20,19 +20,23 @@ Examples:
 
 import sys
 import subprocess
+import os
 
-# Define all scene classes
-SCENES = [
-    "CreativeParadox",
-    "ConceptReframing", 
-    "LLMProblem",
-    "IntroducingCASSolution"
-]
+# Define all scene classes with their file paths
+SCENES = {
+    "CreativeParadox": "scenes/creative_paradox.py",
+    "ConceptReframing": "scenes/concept_reframing.py",
+    "LLMProblem": "scenes/llm_problem.py",
+    "IntroducingCASSolution": "scenes/introducing_cas_solution.py"
+}
+
+# Scene list for indexing
+SCENE_LIST = list(SCENES.keys())
 
 
 def render_scene(scene_name, quality="l"):
     """
-    Render a specific scene from main.py
+    Render a specific scene from its module file
     
     Args:
         scene_name: Name of the scene class to render
@@ -42,9 +46,11 @@ def render_scene(scene_name, quality="l"):
     print(f"Rendering scene: {scene_name}")
     print(f"{'='*60}\n")
     
-    # Build the manim command - use virtual environment python if available
-    import os
-    import sys
+    # Get the scene file path
+    scene_file = SCENES.get(scene_name)
+    if not scene_file:
+        print(f"Error: Scene '{scene_name}' not found")
+        return False
     
     # Check if we're in a virtual environment
     venv_python = os.path.join(os.path.dirname(__file__), ".venv", "Scripts", "python.exe")
@@ -55,7 +61,7 @@ def render_scene(scene_name, quality="l"):
             venv_python,
             "-m", "manim",
             "-q" + quality,  # Quality flag (e.g., -ql, -qh)
-            "main.py",
+            scene_file,      # Render from the scene's own file
             scene_name
         ]
     else:
@@ -63,7 +69,7 @@ def render_scene(scene_name, quality="l"):
         cmd = [
             "manim",
             "-q" + quality,
-            "main.py",
+            scene_file,      # Render from the scene's own file
             scene_name
         ]
     
@@ -84,13 +90,13 @@ def render_scene(scene_name, quality="l"):
 
 def render_all_scenes(quality="l"):
     """Render all scenes"""
-    print(f"\nRendering all {len(SCENES)} scenes...")
+    print(f"\nRendering all {len(SCENE_LIST)} scenes...")
     
     success_count = 0
     failed_scenes = []
     
-    for i, scene in enumerate(SCENES, 1):
-        print(f"\n[{i}/{len(SCENES)}]")
+    for i, scene in enumerate(SCENE_LIST, 1):
+        print(f"\n[{i}/{len(SCENE_LIST)}]")
         if render_scene(scene, quality):
             success_count += 1
         else:
@@ -100,7 +106,7 @@ def render_all_scenes(quality="l"):
     print(f"\n{'='*60}")
     print(f"SUMMARY")
     print(f"{'='*60}")
-    print(f"Successfully rendered: {success_count}/{len(SCENES)} scenes")
+    print(f"Successfully rendered: {success_count}/{len(SCENE_LIST)} scenes")
     
     if failed_scenes:
         print(f"\nFailed scenes:")
@@ -109,7 +115,7 @@ def render_all_scenes(quality="l"):
     else:
         print("\n✓ All scenes rendered successfully!")
     
-    return success_count == len(SCENES)
+    return success_count == len(SCENE_LIST)
 
 
 def main():
@@ -117,23 +123,39 @@ def main():
     # Default quality (can be modified)
     quality = "l"  # l=low (480p), m=medium (720p), h=high (1080p), k=4k
     
+    # Check for quality argument
+    if len(sys.argv) > 2:
+        quality_arg = sys.argv[2].lower()
+        if quality_arg in ["l", "m", "h", "p", "k"]:
+            quality = quality_arg
+        else:
+            print(f"Warning: Invalid quality '{quality_arg}'. Using default 'l'")
+            print("Valid options: l (low), m (medium), h (high), p (production), k (4k)")
+    
     # Check if a specific scene number was provided
     if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        
+        # Check if it's "all"
+        if arg.lower() == "all":
+            render_all_scenes(quality)
+            return
+        
         try:
-            scene_num = int(sys.argv[1])
-            if 1 <= scene_num <= len(SCENES):
-                scene_name = SCENES[scene_num - 1]
+            scene_num = int(arg)
+            if 1 <= scene_num <= len(SCENE_LIST):
+                scene_name = SCENE_LIST[scene_num - 1]
                 print(f"\nRendering scene #{scene_num}: {scene_name}")
                 render_scene(scene_name, quality)
             else:
-                print(f"Error: Scene number must be between 1 and {len(SCENES)}")
+                print(f"Error: Scene number must be between 1 and {len(SCENE_LIST)}")
                 print(f"\nAvailable scenes:")
-                for i, scene in enumerate(SCENES, 1):
+                for i, scene in enumerate(SCENE_LIST, 1):
                     print(f"  {i}. {scene}")
         except ValueError:
-            print("Error: Please provide a valid scene number")
+            print("Error: Please provide a valid scene number or 'all'")
             print(f"\nAvailable scenes:")
-            for i, scene in enumerate(SCENES, 1):
+            for i, scene in enumerate(SCENE_LIST, 1):
                 print(f"  {i}. {scene}")
     else:
         # Render all scenes
