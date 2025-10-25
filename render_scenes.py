@@ -27,6 +27,7 @@ SCENES = {
     "CreativeParadox": "scenes/creative_paradox.py",
     "ConceptReframing": "scenes/concept_reframing.py",
     "LLMProblem": "scenes/llm_problem.py",
+    "OpenEndedAgent": "scenes/open_ended_agent.py",
     "IntroducingCASSolution": "scenes/introducing_cas_solution.py"
 }
 

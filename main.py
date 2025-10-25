@@ -8,6 +8,7 @@ Usage:
     manim main.py CreativeParadox
     manim main.py ConceptReframing
     manim main.py LLMProblem
+    manim main.py OpenEndedAgent
     manim main.py IntroducingCASSolution
     
     # Render all scenes together
@@ -43,6 +44,7 @@ from scenes import (
     CreativeParadox,
     ConceptReframing,
     LLMProblem,
+    OpenEndedAgent,
     IntroducingCASSolution
 )
 
@@ -68,7 +70,7 @@ QUALITY_PRESETS = {
 # MAIN COMPOSITION SCENE
 # ============================================================================
 class CASVideoComposition(Scene):
-    """Combines all four scenes into one continuous video"""
+    """Combines all five scenes into one continuous video"""
     
     def construct(self):
         # Scene 1: Creative Paradox
@@ -89,9 +91,15 @@ class CASVideoComposition(Scene):
         self.wait(0.5)
         self.clear()
         
-        # Scene 4: Introducing CAS Solution
-        scene4 = IntroducingCASSolution()
+        # Scene 4: Open-Ended Agent
+        scene4 = OpenEndedAgent()
         scene4.construct()
+        self.wait(0.5)
+        self.clear()
+        
+        # Scene 5: Introducing CAS Solution
+        scene5 = IntroducingCASSolution()
+        scene5.construct()
         self.wait(1)
 
 
