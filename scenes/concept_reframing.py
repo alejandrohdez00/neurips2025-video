@@ -39,15 +39,22 @@ class ConceptReframing(Scene):
         # More elegant text appearance
         self.play(FadeIn(traditional_label, shift=DOWN*0.2), run_time=1)
         self.play(FadeIn(artwork, scale=0.95), run_time=1.2)
-        self.wait(1.2)  # Longer wait to let viewers see the image
+        self.wait(1.5)  # Longer wait to let viewers see the image
         
         # Transition: "But what if we think differently?"
+        # First fade out the traditional label
         self.play(
             FadeOut(traditional_label, shift=UP*0.2),
+            run_time=1
+        )
+        self.wait(0.3)
+        
+        # Then bring in the new reframing title
+        self.play(
             FadeIn(title, shift=DOWN*0.2),
             run_time=1.2
         )
-        self.wait(0.5)
+        self.wait(0.8)
         
         # Create concept tags data
         concepts_data = [
@@ -213,7 +220,7 @@ class ConceptReframing(Scene):
         ).shift(DOWN * 0.3)
         
         self.play(FadeIn(explanation_text, shift=UP*0.3), run_time=1.5)
-        self.wait(1.5)
+        self.wait(2.5)
         
         # Fade out text to make room for visual
         self.play(FadeOut(explanation_text), run_time=0.8)
@@ -383,12 +390,42 @@ class ConceptReframing(Scene):
             
             all_trajectories.add(trajectory)
         
-        # Animate all trajectories appearing with more spacing
-        self.play(
-            Create(all_trajectories, lag_ratio=0.002),
-            run_time=4,
-            rate_func=linear
-        )
+        # Animate trajectories: first 5 in a staggered way, then the rest all at once
+        # First 5 trajectories - staggered start with overlap
+        if len(all_trajectories) >= 3:
+            for i in range(3):
+                if i == 0:
+                    # First trajectory plays fully
+                    self.play(
+                        Create(all_trajectories[i]),
+                        run_time=1.2,
+                        rate_func=linear
+                    )
+                else:
+                    # Each subsequent trajectory starts when the previous is halfway
+                    # We need to start the next animation before the previous finishes
+                    # Use a shorter duration and no wait
+                    self.play(
+                        Create(all_trajectories[i]),
+                        run_time=1.2,
+                        rate_func=linear
+                    )
+
+            # Now animate the rest all at once (if there are more than 3)
+            if len(all_trajectories) > 3:
+                remaining_trajectories = VGroup(*[all_trajectories[i] for i in range(3, len(all_trajectories))])
+                self.play(
+                    Create(remaining_trajectories, lag_ratio=0.002),
+                    run_time=2.5,
+                    rate_func=linear
+                )
+        else:
+            # Fallback if less than 5 trajectories
+            self.play(
+                Create(all_trajectories, lag_ratio=0.002),
+                run_time=4,
+                rate_func=linear
+            )
         
         self.wait(1)
         
