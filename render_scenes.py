@@ -24,6 +24,7 @@ import os
 
 # Define all scene classes with their file paths
 SCENES = {
+    "GeneralProblem": "scenes/general_problem.py",
     "CreativeParadox": "scenes/creative_paradox.py",
     "ConceptReframing": "scenes/concept_reframing.py",
     "LLMProblem": "scenes/llm_problem.py",

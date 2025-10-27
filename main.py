@@ -5,22 +5,22 @@ Visualization of the CAS concept selection method
 
 Usage:
     # Render individual scenes with default quality (480p15)
+    manim main.py GeneralProblem
     manim main.py CreativeParadox
     manim main.py ConceptReframing
     manim main.py LLMProblem
-    manim main.py OpenEndedAgent
     manim main.py IntroducingCASSolution
     
     # Render all scenes together
     manim main.py CASVideoComposition
     
     # Custom quality settings
-    manim -qh main.py CreativeParadox          # High quality (1080p60)
+    manim -qh main.py GeneralProblem          # High quality (1080p60)
     manim -qk main.py CASVideoComposition      # 4K quality
-    manim -ql main.py CreativeParadox          # Low quality (480p15)
+    manim -ql main.py GeneralProblem          # Low quality (480p15)
     
     # Custom FPS (requires config)
-    manim --custom_config config.cfg main.py CreativeParadox
+    manim --custom_config config.cfg main.py GeneralProblem
     
 Quality flags:
     -ql : Low quality (480p15)
@@ -41,10 +41,10 @@ import sys
 
 # Import all scenes
 from scenes import (
+    GeneralProblem,
     CreativeParadox,
     ConceptReframing,
     LLMProblem,
-    OpenEndedAgent,
     IntroducingCASSolution
 )
 
@@ -73,6 +73,12 @@ class CASVideoComposition(Scene):
     """Combines all five scenes into one continuous video"""
     
     def construct(self):
+        # Scene 0: General Problem
+        scene0 = GeneralProblem()
+        scene0.construct()
+        self.wait(0.5)
+        self.clear()
+        
         # Scene 1: Creative Paradox
         scene1 = CreativeParadox()
         scene1.construct()
@@ -91,15 +97,9 @@ class CASVideoComposition(Scene):
         self.wait(0.5)
         self.clear()
         
-        # Scene 4: Open-Ended Agent
-        scene4 = OpenEndedAgent()
+        # Scene 4: Introducing CAS Solution
+        scene4 = IntroducingCASSolution()
         scene4.construct()
-        self.wait(0.5)
-        self.clear()
-        
-        # Scene 5: Introducing CAS Solution
-        scene5 = IntroducingCASSolution()
-        scene5.construct()
         self.wait(1)
 
 
@@ -149,7 +149,7 @@ if __name__ == "__main__":
         python main.py --create-config --quality high --fps 60
         
         # Then render with it
-        manim --custom_config config.cfg main.py CreativeParadox
+        manim --custom_config config.cfg main.py GeneralProblem
     """
     
     # Check if user wants to create a custom config
