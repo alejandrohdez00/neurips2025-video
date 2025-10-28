@@ -14,5 +14,6 @@ __all__ = [
     'ConceptReframing',
     'LLMProblem',
     'OpenEndedAgent',
-    'IntroducingCASSolution'
+    'IntroducingCASSolution',
+    'EvolutionaryTree'
 ]

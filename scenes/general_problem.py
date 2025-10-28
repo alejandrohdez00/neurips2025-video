@@ -29,11 +29,7 @@ class GeneralProblem(Scene):
         ).arrange(DOWN, buff=0.2).to_edge(UP, buff=1)
         
         self.play(
-            Write(trend_message[0]),
-            run_time=1.2
-        )
-        self.play(
-            Write(trend_message[1]),
+            FadeIn(trend_message),
             run_time=1.2
         )
         self.wait(0.5)
@@ -175,15 +171,7 @@ class GeneralProblem(Scene):
         ).arrange(DOWN, buff=0.2).to_edge(UP, buff=1)
         
         self.play(
-            Write(however_message[0]),
-            run_time=1.2
-        )
-        self.play(
-            Write(however_message[1]),
-            run_time=1.2
-        )
-        self.play(
-            Write(however_message[2]),
+            FadeIn(however_message),
             run_time=1.2
         )
         self.wait(0.5)

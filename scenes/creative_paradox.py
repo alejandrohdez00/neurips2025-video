@@ -62,8 +62,8 @@ class CreativeParadox(Scene):
             run_time=1
         )
         self.play(
-            Write(orig_label),
-            Write(coh_label),
+            FadeIn(orig_label),
+            FadeIn(coh_label),
             run_time=0.8
         )
         self.play(

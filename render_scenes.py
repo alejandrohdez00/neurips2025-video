@@ -29,7 +29,8 @@ SCENES = {
     "ConceptReframing": "scenes/concept_reframing.py",
     "LLMProblem": "scenes/llm_problem.py",
     "OpenEndedAgent": "scenes/open_ended_agent.py",
-    "IntroducingCASSolution": "scenes/introducing_cas_solution.py"
+    "IntroducingCASSolution": "scenes/introducing_cas_solution.py",
+    "EvolutionaryTree": "scenes/evolutionary_tree.py"
 }
 
 # Scene list for indexing

@@ -21,7 +21,7 @@ class IntroducingCASSolution(Scene):
         
         # Title - slightly smaller
         title = Text("Cultural Alien Sampler (CAS)", font_size=38, weight=BOLD).to_edge(UP, buff=0.3)
-        self.play(Write(title), run_time=0.8)
+        self.play(FadeIn(title), run_time=0.8)
         
         # Create split view with divider
         divider = DashedLine(UP * 2.7, DOWN * 3.5, color=GREY, dash_length=0.15)
@@ -35,7 +35,7 @@ class IntroducingCASSolution(Scene):
         ).move_to(LEFT * 3.5 + UP * 2.5)  # Adjusted position
         
         coherence_question = Text(
-            '"Do these concepts fit together?"',
+            '"Do these concepts fit together in an artwork?"',
             font_size=18,  # Reduced from 20
             color=GREEN_A,
             slant=ITALIC
@@ -50,7 +50,7 @@ class IntroducingCASSolution(Scene):
         ).move_to(LEFT * 3.5 + UP * 1.3)
         
         artwork_label = Text(
-            "Trained on: artwork combinations",
+            "Trained on: concepts used together in artworks",
             font_size=15,  # Reduced from 16
             color=GREEN_A,
             line_spacing=0.9
@@ -58,9 +58,9 @@ class IntroducingCASSolution(Scene):
         
         # Example concepts with high coherence
         coherent_concepts = VGroup(
-            Text("Hunter", font_size=17, color=GREEN),  # Reduced from 18
-            Text("Knife", font_size=17, color=GREEN),
-            Text("Machinery", font_size=17, color=GREEN),
+            Text("Anime", font_size=17, color=GREEN),  # Reduced from 18
+            Text("Rabbit", font_size=17, color=GREEN),
+            Text("Renaissance", font_size=17, color=GREEN),
         ).arrange(DOWN, buff=0.25).move_to(LEFT * 3.5 + DOWN * 0.6)  # Increased distance from training section
         
         coherence_arrows = VGroup(*[
@@ -90,7 +90,7 @@ class IntroducingCASSolution(Scene):
         ).move_to(RIGHT * 3.5 + UP * 2.5)  # Adjusted position
         
         context_question = Text(
-            '"Are these combinations typical?"',
+            '"Is this combination typical?"',
             font_size=18,  # Reduced from 20
             color=RED_A,
             slant=ITALIC
@@ -104,7 +104,7 @@ class IntroducingCASSolution(Scene):
         ).move_to(RIGHT * 3.5 + UP * 1.3)
         
         artist_label = Text(
-            "Trained on: artist vocabularies",
+            "Trained on: concepts used in an artist's full conceptual range",
             font_size=15,  # Reduced from 16
             color=RED_A,
             line_spacing=0.9
@@ -112,9 +112,9 @@ class IntroducingCASSolution(Scene):
         
         # Same concepts but checking cultural typicality
         typical_concepts = VGroup(
-            Text("Hunter", font_size=17, color=RED),  # Reduced from 18
-            Text("Knife", font_size=17, color=RED),
-            Text("Machinery", font_size=17, color=RED),
+            Text("Anime", font_size=17, color=RED),  # Reduced from 18
+            Text("Rabbit", font_size=17, color=RED),
+            Text("Renaissance", font_size=17, color=RED),
         ).arrange(DOWN, buff=0.25).move_to(RIGHT * 3.5 + DOWN * 0.6)  # Increased distance from training section
         
         # Show weak/broken connections (culturally rare)
@@ -206,7 +206,7 @@ class IntroducingCASSolution(Scene):
         formula[3].set_color(RED)
         
         target = Text(
-            "Target: Coherent but Culturally Alien",
+            "Target: Coherent but Culturally Untypical Combinations",
             font_size=23,  # Reduced from 26
             color=YELLOW,
             weight=BOLD
