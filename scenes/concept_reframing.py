@@ -10,7 +10,7 @@ import numpy as np
 class ConceptReframing(Scene):
     def construct(self):
         # Title - simpler animation
-        title = Text("Reframing: Painting as Conceptual Combinations", font_size=32).to_edge(UP)
+        title = Text("Our Reframing: Painting as a Conceptual Combination", font_size=32).to_edge(UP)
         
         # Start with a traditional art view - simpler animation
         traditional_label = Text(
@@ -200,7 +200,7 @@ class ConceptReframing(Scene):
         
         # New title for this section
         why_better_title = Text(
-            "Why is this reframing better?",
+            "Why is this reframing advantageous?",
             font_size=32
         ).to_edge(UP)
         

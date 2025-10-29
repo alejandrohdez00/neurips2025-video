@@ -30,7 +30,9 @@ SCENES = {
     "LLMProblem": "scenes/llm_problem.py",
     "OpenEndedAgent": "scenes/open_ended_agent.py",
     "IntroducingCASSolution": "scenes/introducing_cas_solution.py",
-    "EvolutionaryTree": "scenes/evolutionary_tree.py"
+    "EvolutionaryTree": "scenes/evolutionary_tree.py",
+    "CAMShowcase": "scenes/cam_examples.py",
+    "ExperimentalResults": "scenes/experimental_results.py"
 }
 
 # Scene list for indexing

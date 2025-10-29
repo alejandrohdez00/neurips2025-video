@@ -15,5 +15,6 @@ __all__ = [
     'LLMProblem',
     'OpenEndedAgent',
     'IntroducingCASSolution',
-    'EvolutionaryTree'
+    'EvolutionaryTree',
+    'CAMShowcase'
 ]

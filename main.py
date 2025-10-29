@@ -44,7 +44,9 @@ from scenes import (
     ConceptReframing,
     LLMProblem,
     IntroducingCASSolution,
-    EvolutionaryTree
+    EvolutionaryTree,
+    CAMShowcase,
+    ExperimentalResults
 )
 
 

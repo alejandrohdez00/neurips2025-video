@@ -9,7 +9,7 @@ from manim import *
 class OpenEndedAgent(Scene):
     def construct(self):
         # Title - centered on screen
-        title = Text("Open-Ended Painting Generation System", font_size=40, weight=BOLD)
+        title = Text("We designed an Open-Ended Painting Generation System", font_size=30, weight=BOLD)
         subtitle = Text(
             "Evolve a concept pool through strategic recombination",
             font_size=24,
@@ -221,7 +221,7 @@ class OpenEndedAgent(Scene):
         )
         
         compositor_label = Text(
-            "Prompt Compositor",
+            "Prompt Compositor (LLM)",
             font_size=28,
             color=PROMPT_COLOR,
             weight=BOLD
@@ -230,7 +230,7 @@ class OpenEndedAgent(Scene):
         
         # Description
         compositor_desc = Text(
-            "Selects subset of concepts\nfrom the pool\nto form a painting prompt",
+            "LLM selects a subset of concepts\nfrom the pool\nto form a painting prompt",
             font_size=16,
             color=GREY_B,
             slant=ITALIC
