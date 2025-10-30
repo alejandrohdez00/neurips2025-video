@@ -49,36 +49,22 @@ class LLMProblem(Scene):
         
         # SLIDE 2: Explanation of Why
         explanation_box = Rectangle(
-            height=3.5, width=12,
+            height=2.0, width=11,
             fill_color="#16213e",
             fill_opacity=0.9,
             stroke_color=ORANGE,
             stroke_width=2
-        ).shift(DOWN * 2.25)
+        ).shift(DOWN * 2.0)
         
-        explanation_title = Text(
-            "Why?",
-            font_size=30,
-            color=ORANGE,
-            weight=BOLD
-        ).next_to(explanation_box.get_top(), DOWN, buff=0.3)
-        
-        bullet_points = VGroup(
-            Text("• Training data reflects dominant cultural norms", font_size=24, color=WHITE),
-            Text("• Inherently biased toward familiar patterns", font_size=24, color=WHITE),
-            Text("• Cultural anchoring limits originality and diversity", font_size=24, color=WHITE),
-            Text("• Cannot challenge assumptions or subvert norms", font_size=24, color=WHITE)
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(explanation_title, DOWN, buff=0.3)
+        explanation_text = VGroup(
+            Text("Training data reflects", font_size=32, color=WHITE),
+            Text("dominant cultural norms", font_size=32, color=ORANGE, weight=BOLD)
+        ).arrange(DOWN, buff=0.3).move_to(explanation_box)
         
         self.play(
             FadeIn(explanation_box),
-            FadeIn(explanation_title),
-            run_time=1
-        )
-        
-        self.play(
-            LaggedStart(*[FadeIn(bullet, shift=RIGHT*0.3) for bullet in bullet_points], lag_ratio=0.4),
-            run_time=2.5
+            FadeIn(explanation_text),
+            run_time=1.5
         )
         self.wait(2)
         
@@ -87,8 +73,7 @@ class LLMProblem(Scene):
             FadeOut(problem_box),
             FadeOut(problem_text),
             FadeOut(explanation_box),
-            FadeOut(explanation_title),
-            FadeOut(bullet_points),
+            FadeOut(explanation_text),
             run_time=1
         )
         
